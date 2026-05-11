@@ -170,6 +170,7 @@ main {
 }
 
 .metric-card,
+.template-card,
 .result-card,
 .roadmap-list article {
   border: 1px solid var(--line);
@@ -245,6 +246,17 @@ textarea {
   grid-column: 1 / -1;
 }
 
+.template-card {
+  margin-bottom: 20px;
+  padding: 24px;
+}
+
+.template-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
 .action-row {
   display: flex;
   gap: 12px;
@@ -270,9 +282,14 @@ pre {
   word-break: keep-all;
 }
 
+#templateBase,
+#promptPreview {
+  margin-top: 12px;
+}
+
 .roadmap-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 

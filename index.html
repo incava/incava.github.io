@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prompt Crafter</title>
+    <title>Image Prompt Crafter</title>
     <meta
       name="description"
-      content="프롬프트 생성기를 위한 GitHub Pages 기반 사이트 초안"
+      content="이미지 생성용 프롬프트 템플릿과 커스텀 옵션을 조합하는 데모"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,52 +20,53 @@
     <div class="page-shell">
       <header class="hero">
         <p class="eyebrow">INCAVA.GITHUB.IO</p>
-        <h1>Prompt Crafter</h1>
+        <h1>Image Prompt Crafter</h1>
         <p class="hero-copy">
-          목적에 맞는 AI 프롬프트를 빠르게 조합하고 다듬기 위한 사이트의
-          시작점입니다.
+          이미지 생성에 맞는 기본 템플릿을 고르고, 메뉴별 커스텀 옵션을 얹어
+          바로 복사 가능한 프롬프트를 만드는 데모입니다.
         </p>
         <div class="hero-actions">
           <a class="button button-primary" href="#builder">빌더 보기</a>
-          <a class="button button-secondary" href="#roadmap">다음 단계</a>
+          <a class="button button-secondary" href="#library">템플릿 보기</a>
         </div>
       </header>
 
       <main>
         <section class="panel intro-grid">
           <article>
-            <p class="section-label">Why This Setup</p>
-            <h2>가볍게 시작하고, 나중에 크게 확장</h2>
+            <p class="section-label">Concept</p>
+            <h2>템플릿은 고정, 디테일은 유연하게</h2>
             <p>
-              지금은 정적 사이트로 두고, 이후 프롬프트 템플릿, 저장 기능,
-              카테고리 필터, API 연동을 단계적으로 붙일 수 있게 구성했습니다.
+              메뉴마다 기본 프롬프트 골격을 먼저 제공하고, 사용자는 장면 설명과
+              스타일 옵션만 손봐도 안정적인 이미지 프롬프트를 빠르게 만들 수
+              있게 설계했습니다.
             </p>
           </article>
           <article class="metric-card">
-            <span>Deploy Ready</span>
-            <strong>GitHub Pages</strong>
-            <p>별도 서버 없이 바로 게시 가능한 구조</p>
+            <span>Demo Focus</span>
+            <strong>Template + Custom</strong>
+            <p>기본 템플릿과 세부 옵션을 한 번에 조합하는 흐름</p>
           </article>
         </section>
 
         <section id="builder" class="panel builder-panel">
           <div class="builder-heading">
-            <p class="section-label">Starter Builder</p>
-            <h2>초기 프롬프트 생성기 레이아웃</h2>
+            <p class="section-label">Prompt Builder</p>
+            <h2>이미지 생성 프롬프트 데모</h2>
             <p>
-              카테고리, 출력 언어, 세부 입력을 조합해 바로 복사 가능한 프롬프트를
-              생성하도록 구성했습니다.
+              템플릿을 선택하면 해당 메뉴에 맞는 기본 구조가 유지되고, 아래
+              옵션으로 결과를 세밀하게 조정할 수 있습니다.
             </p>
           </div>
 
           <div class="builder-grid">
             <label>
-              <span>카테고리</span>
-              <select id="category">
-                <option value="writing">글쓰기</option>
-                <option value="marketing">마케팅</option>
-                <option value="coding">개발</option>
-                <option value="study">학습</option>
+              <span>템플릿 메뉴</span>
+              <select id="template">
+                <option value="portrait">인물 Portrait</option>
+                <option value="product">제품 Product</option>
+                <option value="interior">공간 Interior</option>
+                <option value="poster">포스터 Poster</option>
               </select>
             </label>
 
@@ -78,50 +79,111 @@
             </label>
 
             <label>
-              <span>목적</span>
+              <span>메인 피사체</span>
               <input
-                id="goal"
+                id="subject"
                 type="text"
-                placeholder="예: 블로그 글 초안 작성"
+                placeholder="예: futuristic fashion model, ceramic skincare bottle"
               />
             </label>
 
             <label>
-              <span>톤</span>
+              <span>핵심 장면 설명</span>
               <input
-                id="tone"
+                id="scene"
                 type="text"
-                placeholder="예: 전문적이고 간결하게"
+                placeholder="예: sunset rooftop, clean studio table, brutalist lobby"
               />
             </label>
 
             <label>
-              <span>대상</span>
-              <input
-                id="audience"
-                type="text"
-                placeholder="예: 마케터, 개발자, 학생"
-              />
+              <span>스타일</span>
+              <select id="style">
+                <option value="cinematic">Cinematic</option>
+                <option value="editorial">Editorial</option>
+                <option value="3d">3D Render</option>
+                <option value="minimal">Minimal</option>
+                <option value="fantasy">Fantasy</option>
+              </select>
             </label>
 
             <label>
-              <span>조건</span>
+              <span>조명</span>
+              <select id="lighting">
+                <option value="soft">Soft Light</option>
+                <option value="dramatic">Dramatic Contrast</option>
+                <option value="neon">Neon Glow</option>
+                <option value="natural">Natural Daylight</option>
+                <option value="golden">Golden Hour</option>
+              </select>
+            </label>
+
+            <label>
+              <span>구도</span>
+              <select id="composition">
+                <option value="closeup">Close-up Focus</option>
+                <option value="wide">Wide Environmental Shot</option>
+                <option value="centered">Centered Composition</option>
+                <option value="dynamic">Dynamic Angle</option>
+              </select>
+            </label>
+
+            <label>
+              <span>색감</span>
+              <select id="palette">
+                <option value="warm">Warm Neutral</option>
+                <option value="cool">Cool Clean</option>
+                <option value="bold">Bold Saturated</option>
+                <option value="mono">Monochrome</option>
+              </select>
+            </label>
+
+            <label>
+              <span>화면 비율</span>
+              <select id="ratio">
+                <option value="1:1">1:1</option>
+                <option value="4:5">4:5</option>
+                <option value="16:9">16:9</option>
+                <option value="9:16">9:16</option>
+              </select>
+            </label>
+
+            <label>
+              <span>품질 키워드</span>
               <input
-                id="constraints"
+                id="quality"
                 type="text"
-                placeholder="예: 300자 이내, bullet 포함"
+                placeholder="예: ultra detailed, premium textures, sharp focus"
               />
             </label>
 
             <label class="full-width">
-              <span>참고 정보</span>
+              <span>추가 커스텀 지시</span>
               <textarea
-                id="context"
+                id="details"
                 rows="5"
-                placeholder="예: 브랜드 톤, 기술 스택, 포함해야 할 키워드, 금지 표현"
+                placeholder="예: reflective floor, subtle mist, luxury branding, magazine cover typography"
+              ></textarea>
+            </label>
+
+            <label class="full-width">
+              <span>제외할 요소 Negative Prompt</span>
+              <textarea
+                id="negative"
+                rows="4"
+                placeholder="예: blurry, extra fingers, bad anatomy, watermark, low quality"
               ></textarea>
             </label>
           </div>
+
+          <article class="template-card">
+            <p class="section-label">Template Base</p>
+            <strong id="templateName">인물 Portrait</strong>
+            <p id="templateDescription">
+              인물 중심 이미지를 위한 기본 템플릿입니다.
+            </p>
+            <pre id="templateBase"></pre>
+          </article>
 
           <div class="action-row">
             <button id="generateButton" class="button button-primary" type="button">
@@ -139,21 +201,25 @@
           </article>
         </section>
 
-        <section id="roadmap" class="panel roadmap-panel">
-          <p class="section-label">Next Build</p>
-          <h2>다음 작업 후보</h2>
+        <section id="library" class="panel roadmap-panel">
+          <p class="section-label">Template Library</p>
+          <h2>데모에 넣은 메뉴 구조</h2>
           <div class="roadmap-list">
             <article>
-              <strong>템플릿 시스템</strong>
-              <p>카테고리별 프롬프트 골격을 선택하도록 확장</p>
+              <strong>인물 Portrait</strong>
+              <p>패션, 캐릭터, 프로필, 에디토리얼 인물 컷 중심</p>
             </article>
             <article>
-              <strong>복사 및 저장</strong>
-              <p>원클릭 복사, localStorage 기반 임시 저장 기능 추가</p>
+              <strong>제품 Product</strong>
+              <p>브랜드 제품 컷, 광고형 스튜디오 샷, 상세 묘사 중심</p>
             </article>
             <article>
-              <strong>다국어 지원</strong>
-              <p>한글/영문 프롬프트 출력 전환</p>
+              <strong>공간 Interior</strong>
+              <p>건축, 로비, 카페, 룸셋 같은 공간 연출 중심</p>
+            </article>
+            <article>
+              <strong>포스터 Poster</strong>
+              <p>타이포그래피와 메시지가 섞인 키비주얼 제작 중심</p>
             </article>
           </div>
         </section>

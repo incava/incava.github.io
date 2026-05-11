@@ -1,72 +1,134 @@
-const categoryInput = document.querySelector("#category");
+const templateInput = document.querySelector("#template");
 const languageInput = document.querySelector("#language");
-const goalInput = document.querySelector("#goal");
-const toneInput = document.querySelector("#tone");
-const audienceInput = document.querySelector("#audience");
-const constraintsInput = document.querySelector("#constraints");
-const contextInput = document.querySelector("#context");
+const subjectInput = document.querySelector("#subject");
+const sceneInput = document.querySelector("#scene");
+const styleInput = document.querySelector("#style");
+const lightingInput = document.querySelector("#lighting");
+const compositionInput = document.querySelector("#composition");
+const paletteInput = document.querySelector("#palette");
+const ratioInput = document.querySelector("#ratio");
+const qualityInput = document.querySelector("#quality");
+const detailsInput = document.querySelector("#details");
+const negativeInput = document.querySelector("#negative");
 const generateButton = document.querySelector("#generateButton");
 const copyButton = document.querySelector("#copyButton");
 const promptPreview = document.querySelector("#promptPreview");
 const statusMessage = document.querySelector("#statusMessage");
+const templateName = document.querySelector("#templateName");
+const templateDescription = document.querySelector("#templateDescription");
+const templateBase = document.querySelector("#templateBase");
 
 const storageKey = "prompt-crafter-form";
 
 const templates = {
-  writing: {
-    ko: "당신은 구조가 탄탄한 콘텐츠 작성 전문가입니다.",
-    en: "You are a structured content-writing expert.",
+  portrait: {
+    label: "인물 Portrait",
+    description: "인물의 표정, 의상, 무드, 배경 깊이를 중심으로 구성합니다.",
+    base: {
+      ko: "주제 인물을 중심에 두고, 얼굴 인상과 의상 디테일, 배경 분위기까지 함께 설계하는 인물 이미지 프롬프트",
+      en: "A portrait-focused image prompt built around the subject's expression, styling, and atmospheric background depth.",
+    },
+    prompt: {
+      ko: "세련된 인물 이미지, 표정과 스타일링이 살아 있고 배경이 무드를 보강하는 구성",
+      en: "A refined portrait image where expression, styling, and background atmosphere work together.",
+    },
   },
-  marketing: {
-    ko: "당신은 전환을 고려해 메시지를 설계하는 마케팅 전략가입니다.",
-    en: "You are a marketing strategist focused on conversion-aware messaging.",
+  product: {
+    label: "제품 Product",
+    description: "브랜드 제품을 선명하게 드러내고 재질과 고급감을 강조합니다.",
+    base: {
+      ko: "제품의 형태, 재질, 반사, 브랜드 무드를 또렷하게 보여주는 제품 광고 이미지 프롬프트",
+      en: "A product-ad prompt that highlights form, material, reflections, and brand atmosphere with clarity.",
+    },
+    prompt: {
+      ko: "광고용 제품 이미지, 재질 표현과 라이팅이 핵심인 고급 스튜디오 연출",
+      en: "A premium studio product visual focused on material definition and lighting control.",
+    },
   },
-  coding: {
-    ko: "당신은 요구사항을 빠르게 코드 작업 단위로 정리하는 시니어 개발자입니다.",
-    en: "You are a senior engineer who turns requirements into practical coding tasks.",
+  interior: {
+    label: "공간 Interior",
+    description: "공간의 구조, 재료감, 자연광 흐름, 동선을 함께 묘사합니다.",
+    base: {
+      ko: "건축적 구조와 소재, 조명 분위기, 공간 깊이를 함께 설계하는 인테리어 이미지 프롬프트",
+      en: "An interior prompt that defines architecture, materials, light atmosphere, and spatial depth together.",
+    },
+    prompt: {
+      ko: "감도 높은 공간 이미지, 구조적 질서와 조명 무드가 살아 있는 연출",
+      en: "A tasteful interior scene with strong spatial rhythm and deliberate lighting mood.",
+    },
   },
-  study: {
-    ko: "당신은 복잡한 개념을 학습 가능한 단계로 설명하는 튜터입니다.",
-    en: "You are a tutor who breaks complex topics into learnable steps.",
+  poster: {
+    label: "포스터 Poster",
+    description: "키비주얼과 타이포그래피가 함께 보이는 그래픽 중심 템플릿입니다.",
+    base: {
+      ko: "강한 메시지 전달을 위해 메인 비주얼과 타이포 리듬을 함께 설계하는 포스터 프롬프트",
+      en: "A poster prompt designed to combine a key visual with rhythmic typography and clear messaging.",
+    },
+    prompt: {
+      ko: "강렬한 포스터 비주얼, 그래픽 포인트와 타이포 레이아웃이 균형 잡힌 구성",
+      en: "A bold poster visual balancing graphic impact with structured typography layout.",
+    },
   },
 };
 
-function buildPrompt() {
-  const category = categoryInput.value;
+function updateTemplatePreview() {
+  const template = templates[templateInput.value];
   const language = languageInput.value;
-  const goal = goalInput.value.trim() || "명확한 결과를 만들어 줘";
-  const tone = toneInput.value.trim() || "명확하고 읽기 쉽게";
-  const audience = audienceInput.value.trim() || "일반 사용자";
-  const constraints = constraintsInput.value.trim() || "핵심만 간결하게 정리";
-  const context = contextInput.value.trim() || "별도 참고 정보 없음";
+
+  templateName.textContent = template.label;
+  templateDescription.textContent = template.description;
+  templateBase.textContent = template.base[language];
+}
+
+function buildPrompt() {
+  const template = templates[templateInput.value];
+  const language = languageInput.value;
+  const subject = subjectInput.value.trim() || "main subject";
+  const scene = sceneInput.value.trim() || "designed environment";
+  const style = styleInput.value;
+  const lighting = lightingInput.value;
+  const composition = compositionInput.value;
+  const palette = paletteInput.value;
+  const ratio = ratioInput.value;
+  const quality = qualityInput.value.trim() || "high detail, clean rendering, refined texture";
+  const details = detailsInput.value.trim() || "no extra custom instructions";
+  const negative = negativeInput.value.trim() || "blurry, distorted anatomy, low quality, watermark";
 
   const isKorean = language === "ko";
   const prompt = isKorean
     ? [
-        templates[category].ko,
-        `목표: ${goal}`,
-        `톤앤매너: ${tone}`,
-        `대상 독자/사용자: ${audience}`,
-        `반드시 지킬 조건: ${constraints}`,
-        `참고 정보: ${context}`,
-        "작업 방식:",
-        "1. 먼저 가장 적합한 결과물을 바로 제시합니다.",
-        "2. 필요한 경우 선택 이유나 대안을 짧게 덧붙입니다.",
-        "3. 모호한 표현은 줄이고, 실행 가능한 문장으로 작성합니다.",
-        "4. 출력은 한국어로 작성합니다.",
+        `[${template.label}]`,
+        template.prompt.ko,
+        `메인 피사체: ${subject}`,
+        `장면 설명: ${scene}`,
+        `스타일: ${style}`,
+        `조명: ${lighting}`,
+        `구도: ${composition}`,
+        `색감: ${palette}`,
+        `화면 비율: ${ratio}`,
+        `품질 키워드: ${quality}`,
+        `추가 커스텀: ${details}`,
+        `네거티브 프롬프트: ${negative}`,
+        "",
+        "최종 이미지 프롬프트:",
+        `${subject}, ${scene}, ${template.prompt.ko}, ${style} style, ${lighting} lighting, ${composition}, ${palette} palette, aspect ratio ${ratio}, ${quality}, ${details}`,
       ].join("\n")
     : [
-        templates[category].en,
-        `Goal: ${goal}`,
-        `Tone: ${tone}`,
-        `Audience: ${audience}`,
-        `Constraints: ${constraints}`,
-        `Context: ${context}`,
-        "Working rules:",
-        "1. Deliver the most useful result first.",
-        "2. Add brief rationale or alternatives only if needed.",
-        "3. Avoid vague wording and write in actionable language.",
-        "4. Output must be in English.",
+        `[${template.label}]`,
+        template.prompt.en,
+        `Subject: ${subject}`,
+        `Scene: ${scene}`,
+        `Style: ${style}`,
+        `Lighting: ${lighting}`,
+        `Composition: ${composition}`,
+        `Palette: ${palette}`,
+        `Aspect Ratio: ${ratio}`,
+        `Quality Notes: ${quality}`,
+        `Custom Details: ${details}`,
+        `Negative Prompt: ${negative}`,
+        "",
+        "Final Image Prompt:",
+        `${subject}, ${scene}, ${template.prompt.en}, ${style} style, ${lighting} lighting, ${composition}, ${palette} palette, aspect ratio ${ratio}, ${quality}, ${details}`,
       ].join("\n");
 
   promptPreview.textContent = prompt;
@@ -78,13 +140,18 @@ function buildPrompt() {
 
 function saveForm() {
   const payload = {
-    category: categoryInput.value,
+    template: templateInput.value,
     language: languageInput.value,
-    goal: goalInput.value,
-    tone: toneInput.value,
-    audience: audienceInput.value,
-    constraints: constraintsInput.value,
-    context: contextInput.value,
+    subject: subjectInput.value,
+    scene: sceneInput.value,
+    style: styleInput.value,
+    lighting: lightingInput.value,
+    composition: compositionInput.value,
+    palette: paletteInput.value,
+    ratio: ratioInput.value,
+    quality: qualityInput.value,
+    details: detailsInput.value,
+    negative: negativeInput.value,
   };
 
   localStorage.setItem(storageKey, JSON.stringify(payload));
@@ -98,13 +165,18 @@ function loadForm() {
 
   try {
     const payload = JSON.parse(saved);
-    categoryInput.value = payload.category || "writing";
+    templateInput.value = payload.template || "portrait";
     languageInput.value = payload.language || "ko";
-    goalInput.value = payload.goal || "";
-    toneInput.value = payload.tone || "";
-    audienceInput.value = payload.audience || "";
-    constraintsInput.value = payload.constraints || "";
-    contextInput.value = payload.context || "";
+    subjectInput.value = payload.subject || "";
+    sceneInput.value = payload.scene || "";
+    styleInput.value = payload.style || "cinematic";
+    lightingInput.value = payload.lighting || "soft";
+    compositionInput.value = payload.composition || "closeup";
+    paletteInput.value = payload.palette || "warm";
+    ratioInput.value = payload.ratio || "1:1";
+    qualityInput.value = payload.quality || "";
+    detailsInput.value = payload.details || "";
+    negativeInput.value = payload.negative || "";
   } catch {
     localStorage.removeItem(storageKey);
   }
@@ -127,5 +199,8 @@ async function copyPrompt() {
 
 generateButton.addEventListener("click", buildPrompt);
 copyButton.addEventListener("click", copyPrompt);
+templateInput.addEventListener("change", updateTemplatePreview);
+languageInput.addEventListener("change", updateTemplatePreview);
 
 loadForm();
+updateTemplatePreview();
